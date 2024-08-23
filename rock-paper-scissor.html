@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .game-container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .choices {
+            margin: 20px 0;
+        }
+
+        .choice {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #df198c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .choice:hover {
+            background-color: #d459ab;
+        }
+
+        #resultMessage {
+            margin: 20px 0;
+            font-size: 1.5em;
+        }
+
+        #scoreMessage {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        #resetButton {
+            padding: 10px 20px;
+            background-color: #69d2e0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #resetButton:hover {
+            background-color: #8756be;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Rock Paper Scissors</h1>
+        <div class="choices">
+            <button class="choice" id="rock">Rock</button>
+            <button class="choice" id="paper">Paper</button>
+            <button class="choice" id="scissors">Scissors</button>
+        </div>
+        <p id="resultMessage"></p>
+        <p id="scoreMessage">Player: 0 | Computer: 0</p>
+        <button id="resetButton">Reset</button>
+    </div>
+    <script>
+        const choices = ['rock', 'paper', 'scissors'];
+        let playerScore = 0;
+        let computerScore = 0;
+
+        const resultMessage = document.getElementById('resultMessage');
+        const scoreMessage = document.getElementById('scoreMessage');
+        const resetButton = document.getElementById('resetButton');
+
+        document.querySelectorAll('.choice').forEach(button => {
+            button.addEventListener('click', () => {
+                const playerChoice = button.id;
+                const computerChoice = getComputerChoice();
+                const result = determineWinner(playerChoice, computerChoice);
+                updateScore(result);
+                displayResult(playerChoice, computerChoice, result);
+            });
+        });
+
+        resetButton.addEventListener('click', resetGame);
+
+        function getComputerChoice() {
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+
+        function determineWinner(player, computer) {
+            if (player === computer) {
+                return 'draw';
+            } else if (
+                (player === 'rock' && computer === 'scissors') ||
+                (player === 'paper' && computer === 'rock') ||
+                (player === 'scissors' && computer === 'paper')
+            ) {
+                return 'player';
+            } else {
+                return 'computer';
+            }
+        }
+
+        function updateScore(result) {
+            if (result === 'player') {
+                playerScore++;
+            } else if (result === 'computer') {
+                computerScore++;
+            }
+            scoreMessage.textContent = `Player: ${playerScore} | Computer: ${computerScore}`;
+        }
+
+        function displayResult(player, computer, result) {
+            if (result === 'draw') {
+                resultMessage.textContent = `It's a draw! You both chose ${player}.`;
+            } else if (result === 'player') {
+                resultMessage.textContent = `You win! ${player} beats ${computer}.`;
+            } else {
+                resultMessage.textContent = `You lose! ${computer} beats ${player}.`;
+            }
+        }
+
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            scoreMessage.textContent = `Player: ${playerScore} | Computer: ${computerScore}`;
+            resultMessage.textContent = '';
+        }
+
+    </script>
+</body>
+</html>
